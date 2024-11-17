@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kotlin Spring Demo - 제품 상세 정보</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+<body class="container mt-5">
+<h1 class="text-center mb-4">제품 상세 정보</h1>
+<div class="card mb-4 shadow-sm">
+    <div class="product-details">
+        <div class="product-image">
+<!--            <img src="" alt="Product Image" />-->
+        </div>
+        <div class="product-info p-4">
+            <h2 th:text="${product.name}"></h2>
+            <h4 class="text-muted">가격: <span th:text="${product.price + '원'}"></span></h4>
+        </div>
+    </div>
+</div>
+<div class="text-center mt-4">
+    <a th:href="@{/products}" class="btn btn-secondary">제품 목록으로 돌아가기</a>
+</div>
+</body>
+</html>

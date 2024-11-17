@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kotlin Spring Demo - 제품 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+</head>
+<body class="container mt-5">
+<h1 class="text-center mb-4">제품 목록</h1>
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+    <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Event</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product, iterStat : ${products}">
+        <td th:text="${iterStat.count}"></td>
+        <td>
+            <a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.name}"></a>
+        </td>
+        <td th:text="${product.price + '원'}"></td>
+        <td>
+            <span th:onclick="'deleteProduct(this, ' + ${product.id} + ')'">🗑</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="text-center mt-4">
+    <a th:href="@{/products/new}" class="btn btn-primary">제품 등록하기</a>
+</div>
+</body>
+</html>
+
+<script>
+    // 제품 삭제
+    const deleteProduct = (button, productId) => {
+        fetch(`/products/${productId}`, {method: 'DELETE'})
+            .then((response) => {
+                console.log(response)
+                if (!response.ok) {
+                    throw new Error("제품 삭제에 실패했습니다.")
+                }
+                // 해당 버튼의 행을 DOM에서 제거
+                const row = button.closest('tr');
+                if (row) {
+                    row.remove();
+                    updateRowNumbers();
+                }
+            })
+            .catch((error) => {
+                console.error("제품 삭제 도중 오류가 발생했습니다.")
+                console.error(error)
+            })
+    }
+
+    // 행 번호 업데이트
+    const updateRowNumbers = () => {
+        // 모든 행을 다시 조회
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach((row, index) => {
+            // 각 행의 첫 번째 <td>에 다시 넘버링
+            const td = row.querySelector('td');
+            if (td) {
+                td.textContent = (index + 1).toString();
+            }
+        });
+    };
+</script>
